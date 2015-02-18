@@ -1,25 +1,30 @@
 'use strict';
 
 var DEBUG = true;
-var GLOBAL = this;
 
-if (!this.debug) {
-  this.debug = function debug(message) {
+if (!self.debug) {
+  self.debug = function debug(message) {
     dump("Service worker thread: " + message + "\n");
   };
 }
 
-this.addEventListener('install', evt => {
+self.addEventListener('install', evt => {
   if (DEBUG) {
-    GLOBAL.debug('service worker installed!');
+    debug('service worker installed!');
   }
 });
 
-this.addEventListener('fetch', evt => {
+self.addEventListener('activate', evt => {
+  if (DEBUG) {
+    debug('service worker activated!');
+  }
+});
+
+self.addEventListener('fetch', evt => {
   var request = evt.request;
   var url = new URL(request.url);
   
   if (DEBUG) {
-    GLOBAL.debug('fetching ' + url.pathname);
+    debug('fetching ' + url.pathname);
   }
 });
