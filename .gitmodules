@@ -1,0 +1,4 @@
+[submodule "offliner"]
+	path = offliner
+	url = https://github.com/jaoo/offliner.git
+	branch = add-offliner
