@@ -27,4 +27,6 @@ self.addEventListener('fetch', evt => {
   if (DEBUG) {
     debug('fetching ' + url.pathname);
   }
+
+  evt.respondWith(fetch(request));
 });
