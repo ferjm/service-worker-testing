@@ -45,7 +45,7 @@ window.addEventListener('DOMContentLoaded', function load() {
       });
     };
 
-    navigator.serviceWorker.register('js/service.js').then(
+    navigator.serviceWorker.register('offliner/offline-cache.js').then(
       swr => {
         if (swr.installing) {
           dump('Client context: registration has an installing worker (' +
