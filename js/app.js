@@ -15,9 +15,9 @@ window.addEventListener('DOMContentLoaded', function load() {
         if (!swr) {
           return;
         }
-        if (swr.installed) {
+        if (swr.active) {
           dump('Client context (register): registration has an installed' +
-               'worker (' + swr.installed.state + ')!\n');
+               'worker (' + swr.active.state + ')!\n');
         }
       });
     };
