@@ -15,9 +15,17 @@ window.addEventListener('DOMContentLoaded', function load() {
         if (!swr) {
           return;
         }
+        if (swr.installing) {
+          dump('Client context: registration has an installing worker (' +
+               swr.installing.state + ')!\n');
+        }
+        if (swr.waiting) {
+          dump('Client context: registration has an waiting worker (' +
+               swr.waiting.state + ')!\n');
+        }
         if (swr.active) {
-          dump('Client context (register): registration has an installed' +
-               'worker (' + swr.active.state + ')!\n');
+          dump('Client context: registration has an active worker (' +
+               swr.active.state + ')!\n');
         }
       });
     };
@@ -33,10 +41,6 @@ window.addEventListener('DOMContentLoaded', function load() {
         });
       });
     };
-
-    if (navigator.serviceWorker.controller) {
-      return;
-    }
 
     navigator.serviceWorker.register('js/service.js').then(
       swr => {

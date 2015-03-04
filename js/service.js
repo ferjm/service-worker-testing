@@ -14,9 +14,6 @@ self.addEventListener('install', evt => {
   }
 
   function delaysAsInstalled() {
-    if (DEBUG) {
-      debug('delaying treating the installing worker as installed!');
-    }
     return Promise.resolve();
   }
   evt.waitUntil(delaysAsInstalled());
@@ -27,9 +24,6 @@ self.addEventListener('activate', evt => {
     debug('activate event fired!');
   }
   function delaysAsActivated() {
-    if (DEBUG) {
-      debug('delaying treating the installing worker as activated!');
-    }
     return Promise.resolve();
   }
   evt.waitUntil(delaysAsActivated());
