@@ -16,6 +16,7 @@ window.addEventListener('DOMContentLoaded', function load() {
     document.getElementById('check-registration').onclick = function() {
       navigator.serviceWorker.getRegistration().then(swr => {
         if (!swr) {
+          dump('Client context: no navigator.serviceWorker.getRegistration() result!\n');
           return;
         }
         if (swr.installing) {
@@ -36,6 +37,7 @@ window.addEventListener('DOMContentLoaded', function load() {
     document.getElementById('unregister-registration').onclick = function() {
       navigator.serviceWorker.getRegistration().then(swr => {
         if (!swr) {
+          dump('Client context: no navigator.serviceWorker.getRegistration() result!\n');
           return;
         }
         swr.unregister().then(result => {
