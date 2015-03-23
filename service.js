@@ -37,5 +37,7 @@ self.addEventListener('fetch', evt => {
     debug('fetching ' + url.pathname);
   }
 
-  evt.respondWith(fetch(request));
+  evt.respondWith(fetch(request).then((response) => {
+    return response;
+  }));
 });
