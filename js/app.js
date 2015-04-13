@@ -20,9 +20,25 @@ window.addEventListener('DOMContentLoaded', function load() {
 
   if ('serviceWorker' in navigator) {
     document.getElementById('register-worker').onclick = function() {
-      navigator.serviceWorker.register('service.js').then(
+      navigator.serviceWorker.register('service.js', {scope: './'}).then(
         swr => {
           dumpSwr(swr);
+
+          window.onmessage = function(msg) {
+            if (msg.data === 'READY') {
+              swr.active.postMessage('ping');
+            } else {
+              dump('Client context. Message from service worker: ' + msg.data + '\n');
+            }
+          };
+          var content = document.getElementById('content');
+          var iframe = document.createElement('iframe');
+          iframe.setAttribute('src', 'test.html');
+          if (!content) {
+            dump('Client context: unable to append child!\n');
+            return;
+          }
+          content.appendChild(iframe);
         },
         error => {
           dump('Client context: ' + error + '\n');

@@ -8,6 +8,17 @@ if (!self.debug) {
   };
 }
 
+self.addEventListener('message', msg => {
+  debug('event from client - ' + msg.data);
+  self.clients.matchAll().then(function(res) {
+    if (!res.length) {
+      debug("no clients are currently controlled!");
+      return;
+    }
+    res[0].postMessage(msg.data === 'ping' ? 'pong' : msg.data);
+  });
+});
+
 self.addEventListener('install', evt => {
   if (DEBUG) {
     debug('install event fired!');
