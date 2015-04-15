@@ -1,6 +1,14 @@
 'use strict';
 
 var DEBUG = true;
+var CACHE_NAME = 'foo';
+var cached = [
+  '/index.html',
+  '/test.html',
+  '/css/app.css',
+  '/js/app.js',
+  '/img/mozilla.png'
+];
 
 if (!self.debug) {
   self.debug = function debug(message) {
@@ -25,7 +33,11 @@ self.addEventListener('install', evt => {
   }
 
   function delaysAsInstalled() {
-    return Promise.resolve();
+    debug('opening cache...');
+    return caches.open(CACHE_NAME).then((cache) => {
+      debug('opened cache so adding content!');
+      return cache.addAll(cached);
+    });
   }
   evt.waitUntil(delaysAsInstalled());
 });
@@ -48,7 +60,13 @@ self.addEventListener('fetch', evt => {
     debug('fetching ' + url.pathname);
   }
 
-  evt.respondWith(fetch(request).then((response) => {
-    return response;
-  }));
+  evt.respondWith(
+    caches.match(request).then((response) => {
+      if (response) {
+        return response;
+      } else {
+        return fetch(request);
+      }
+    })
+  );
 });
