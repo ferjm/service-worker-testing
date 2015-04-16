@@ -55,7 +55,7 @@ self.addEventListener('activate', evt => {
 self.addEventListener('fetch', evt => {
   var request = evt.request;
   var url = new URL(request.url);
-  
+
   if (DEBUG) {
     debug('fetching ' + url.pathname);
   }
@@ -65,7 +65,18 @@ self.addEventListener('fetch', evt => {
       if (response) {
         return response;
       } else {
-        return fetch(request);
+        var fetchRequest = request.clone();
+        return fetch(fetchRequest).then((response) => {
+          if (!response ||
+              (response.status !== 200) || (response.type !== 'basic')) {
+            return response;
+          }
+          var responseToCache = response.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(request, responseToCache);
+          });
+          return response;
+        });
       }
     })
   );
