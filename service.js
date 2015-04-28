@@ -1,5 +1,8 @@
 'use strict';
 
+// date output of |date "+DATE: %m/%d/%y TIME: %H:%M:%S"| command.
+var LAST_UPDATE = '';
+
 var DEBUG = true;
 var CACHE_NAME = 'foo';
 var cached = [
@@ -12,7 +15,7 @@ var cached = [
 
 if (!self.debug) {
   self.debug = function debug(message) {
-    dump("Execution context: " + message + "\n");
+    dump("Execution context(" + LAST_UPDATE + "): " + message + "\n");
   };
 }
 
