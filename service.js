@@ -1,7 +1,7 @@
 'use strict';
 
 // date output of |date "+DATE: %m/%d/%y TIME: %H:%M:%S"| command.
-var LAST_UPDATE = '';
+var LAST_UPDATE = 'DATE: 04/29/15 TIME: 16:30:22';
 
 var DEBUG = true;
 var CACHE_NAME = 'foo';
