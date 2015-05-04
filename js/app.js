@@ -1,20 +1,29 @@
 'use strict';
 
+var DEBUG = true;
+
 window.addEventListener('DOMContentLoaded', function load() {
   window.removeEventListener('DOMContentLoaded', load);
 
-  function dumpSwr(swr) {
+  function debug(msg) {
+    if (DEBUG) {
+      dump(msg + '\n');
+      console.log(msg);
+    }
+  }
+
+  function debugSwr(swr) {
     if (swr.installing) {
-      dump('Client context: registration has an installing worker (' +
-           swr.installing.state + ')!\n');
+      debug('Client context: registration has an installing worker (' +
+           swr.installing.state + ')!');
     }
     if (swr.waiting) {
-      dump('Client context: registration has an waiting worker (' +
-           swr.waiting.state + ')!\n');
+      debug('Client context: registration has an waiting worker (' +
+           swr.waiting.state + ')!');
     }
     if (swr.active) {
-      dump('Client context: registration has an active worker (' +
-           swr.active.state + ')!\n');
+      debug('Client context: registration has an active worker (' +
+           swr.active.state + ')!');
     }
   }
 
@@ -22,17 +31,17 @@ window.addEventListener('DOMContentLoaded', function load() {
     document.getElementById('register-worker').onclick = function() {
       navigator.serviceWorker.register('service.js', {scope: './'}).then(
         swr => {
-          dumpSwr(swr);
+          debugSwr(swr);
         },
         error => {
-          dump('Client context: ' + error + '\n');
+          debug('Client context: ' + error);
       });
     };
 
     document.getElementById('post-message').onclick = function() {
       navigator.serviceWorker.getRegistration().then(swr => {
         if (!swr) {
-          dump('Client context: no navigator.serviceWorker.getRegistration() result!\n');
+          debug('Client context: no navigator.serviceWorker.getRegistration() result!');
           return;
         }
         var content, iframe;
@@ -41,7 +50,7 @@ window.addEventListener('DOMContentLoaded', function load() {
             if (msg.data === 'READY') {
               swr.active.postMessage('ping');
             } else {
-              dump('Client context. Message from service worker: ' + msg.data + '\n');
+              debug('Client context. Message from service worker: ' + msg.data);
               resolve();
             }
           };
@@ -49,7 +58,7 @@ window.addEventListener('DOMContentLoaded', function load() {
           iframe = document.createElement('iframe');
           iframe.setAttribute('src', 'test.html');
           if (!content) {
-            dump('Client context: unable to append child!\n');
+            debug('Client context: unable to append child!');
             return;
           }
           content.appendChild(iframe);
@@ -63,52 +72,52 @@ window.addEventListener('DOMContentLoaded', function load() {
     document.getElementById('update-worker').onclick = function() {
       navigator.serviceWorker.getRegistration().then(swr => {
         if (!swr) {
-          dump('Client context: no navigator.serviceWorker.getRegistration() result!\n');
+          debug('Client context: no navigator.serviceWorker.getRegistration() result!');
           return;
         }
         swr.update();
-        dump('Client context: service worker registration updated!\n');
+        debug('Client context: service worker registration updated!');
       });
     };
 
     document.getElementById('register-skip-waiting-worker').onclick = function() {
       navigator.serviceWorker.register('skip-waiting-service.js', {scope: './'}).then(
         swr => {
-          dumpSwr(swr);
+          debugSwr(swr);
         },
         error => {
-          dump('Client context: ' + error + '\n');
+          debug('Client context: ' + error);
       });
     };
 
     document.getElementById('check-controller').onclick = function() {
       if (!navigator.serviceWorker.controller) {
-        dump('Client context: no navigator.serviceWorker.controller object!\n');
+        debug('Client context: no navigator.serviceWorker.controller object!');
         return;
       }
-      dump('Client context: navigator.serviceWorker.controller.state is ' +
-           (navigator.serviceWorker.controller.state)+ '\n');
+      debug('Client context: navigator.serviceWorker.controller.state is ' +
+           (navigator.serviceWorker.controller.state));
     };
 
     document.getElementById('check-registration').onclick = function() {
       navigator.serviceWorker.getRegistration().then(swr => {
         if (!swr) {
-          dump('Client context: no navigator.serviceWorker.getRegistration() result!\n');
+          debug('Client context: no navigator.serviceWorker.getRegistration() result!');
           return;
         }
-        dumpSwr(swr);
+        debugSwr(swr);
       });
     };
 
     document.getElementById('unregister-registration').onclick = function() {
       navigator.serviceWorker.getRegistration().then(swr => {
         if (!swr) {
-          dump('Client context: no navigator.serviceWorker.getRegistration() result!\n');
+          debug('Client context: no navigator.serviceWorker.getRegistration() result!');
           return;
         }
         swr.unregister().then(result => {
-          dump('Client context: unregister registration ' +
-               (result ? 'succeed' : 'failed') + '!\n');
+          debug('Client context: unregister registration ' +
+               (result ? 'succeed' : 'failed'));
         });
       });
     };

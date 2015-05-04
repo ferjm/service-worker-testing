@@ -4,7 +4,11 @@ var DEBUG = true;
 
 if (!self.debug) {
   self.debug = function debug(message) {
+    if (!DEBUG) {
+      return;
+    }
     dump("Execution context: " + message + "\n");
+    console.log(message);
   };
 }
 
