@@ -7,7 +7,7 @@ if (!self.debug) {
     if (!DEBUG) {
       return;
     }
-    dump("Execution context: " + message + "\n");
+    dump("Execution context(skip-waiting-service): " + message + "\n");
     console.log(message);
   };
 }
@@ -46,4 +46,15 @@ self.addEventListener('activate', evt => {
     return Promise.resolve();
   }
   evt.waitUntil(delaysAsActivated());
+});
+
+self.addEventListener('fetch', evt => {
+  var request = evt.request;
+  var url = new URL(request.url);
+
+  if (DEBUG) {
+    debug('fetching ' + url.pathname);
+  }
+
+  evt.respondWith(fetch(request));
 });

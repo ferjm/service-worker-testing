@@ -1,6 +1,6 @@
 'use strict';
 
-// date output of |date "+DATE: %m/%d/%y TIME: %H:%M:%S"| command.
+// date output of |date +%s| command.
 var LAST_UPDATE = '';
 
 var DEBUG = true;
