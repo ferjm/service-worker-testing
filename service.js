@@ -30,7 +30,29 @@ self.addEventListener('message', msg => {
       debug("no clients are currently controlled!");
       return;
     }
-    res[0].postMessage(msg.data === 'ping' ? 'pong' : msg.data);
+    var client = res[0];
+    switch (msg.data) {
+      case 'ping':
+        client.postMessage('pong');
+        break;
+      case 'sync':
+        if (self.registration) {
+          self.registration.sync.register('test-from-sw').then(() => {
+            debug('Sync request successfully registered on SW');
+            client.postMessage('OK');
+          }).catch(error => {
+            debug('Could not register sync request ' + error);
+            client.postMessage('KO');
+          });
+        } else {
+          debug('No registration!');
+          client.postMessage('KO');
+        }
+        break;
+      default:
+        client.postMessage(msg.data);
+        break;
+    }
   });
 });
 

@@ -37,6 +37,26 @@ window.addEventListener('DOMContentLoaded', function load() {
     }
   }
 
+  function postMessage(swr, message) {
+    var content, iframe;
+    window.onmessage = function(msg) {
+      if (msg.data === 'READY') {
+        swr.active.postMessage(message);
+      } else {
+        debug('Client context. Message from service worker: ' + msg.data);
+        content.removeChild(iframe);
+      }
+    };
+    content = document.getElementById('content');
+    iframe = document.createElement('iframe');
+    iframe.setAttribute('src', 'test.html');
+    if (!content) {
+      debug('Client context: unable to append child!');
+      return;
+    }
+    content.appendChild(iframe);
+  }
+
   document.getElementById('register-worker').onclick = function() {
     navigator.serviceWorker.register('service.js', {scope: './'}).then(
       swr => {
@@ -50,23 +70,7 @@ window.addEventListener('DOMContentLoaded', function load() {
   document.getElementById('post-message').onclick = function() {
     navigator.serviceWorker.getRegistration().then(swr => {
       required(swr, 'Client context: no ServiceWorkerRegistration!');
-      var content, iframe;
-      window.onmessage = function(msg) {
-        if (msg.data === 'READY') {
-          swr.active.postMessage('ping');
-        } else {
-          debug('Client context. Message from service worker: ' + msg.data);
-          content.removeChild(iframe);
-        }
-      };
-      content = document.getElementById('content');
-      iframe = document.createElement('iframe');
-      iframe.setAttribute('src', 'test.html');
-      if (!content) {
-        debug('Client context: unable to append child!');
-        return;
-      }
-      content.appendChild(iframe);
+      postMessage(swr, 'ping');
     });
   };
 
@@ -78,6 +82,7 @@ window.addEventListener('DOMContentLoaded', function load() {
       }).catch(error => {
         debug('Could not register sync request ' + error);
       });
+      postMessage(swr, 'sync');
     });
   };
 
