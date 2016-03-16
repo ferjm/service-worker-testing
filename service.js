@@ -110,3 +110,7 @@ self.addEventListener('fetch', evt => {
     })
   );
 });
+
+self.addEventListener('sync', evt => {
+  debug('sync event received ' + evt.tag);
+});
