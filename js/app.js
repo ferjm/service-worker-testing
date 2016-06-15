@@ -79,10 +79,13 @@ window.addEventListener('DOMContentLoaded', function load() {
       required(swr, 'Client context: no ServiceWorkerRegistration!');
       swr.sync.register('test').then(() => {
         debug('Sync request successfully registered');
+        return swr.sync.getTags().then(tags => {
+          debug('TAGS ' + JSON.stringify(tags));
+        });
       }).catch(error => {
-        debug('Could not register sync request ' + error);
+        debug('Sync error ' + error);
       });
-      postMessage(swr, 'sync');
+      //postMessage(swr, 'sync');
     });
   };
 
